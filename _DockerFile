@@ -1,0 +1,14 @@
+FROM golang:alpine AS builder
+RUN apk update && apk add --no-cache git
+WORKDIR $GOPATH/src/app/
+
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /go/bin/linebot
+
+
+FROM scratch 
+COPY --from=builder /go/bin/linebot /go/bin/linebot
+
+RUN ["/go/bin/linebot"]

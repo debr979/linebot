@@ -1,0 +1,2 @@
+sudo docker build -t linebot .
+sudo docker run --rm -d -p 8081:8081 linebot
